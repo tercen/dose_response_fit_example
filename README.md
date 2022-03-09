@@ -48,10 +48,10 @@ Where:
 
 Further reading:
 
-[Introduction to non-linear regression](https://www.statforbiology.com/nonlinearregression/usefulequations).
-[Nonlinear regression on Wikipedia](https://en.wikipedia.org/wiki/Nonlinear_regression).
-[nplr vignette](https://cran.r-project.org/web/packages/nplr/vignettes/nplr.pdf)
-[drda vignette](https://cran.r-project.org/web/packages/drda/vignettes/drda.pdf)
+[Introduction to non-linear regression](https://www.statforbiology.com/nonlinearregression/usefulequations).  
+[Nonlinear regression on Wikipedia](https://en.wikipedia.org/wiki/Nonlinear_regression).  
+[nplr vignette](https://cran.r-project.org/web/packages/nplr/vignettes/nplr.pdf).  
+[drda vignette](https://cran.r-project.org/web/packages/drda/vignettes/drda.pdf).  
 
 
 ##### See Also
