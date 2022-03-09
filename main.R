@@ -120,7 +120,7 @@ library(nplr)
   if(npar == 5){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/
-                ((1 + 10(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+                ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/

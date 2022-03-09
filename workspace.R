@@ -124,7 +124,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   if(npar == 5){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/
-                ((1 + 10(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+                ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/
