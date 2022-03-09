@@ -5,7 +5,7 @@ library(drda)
 library(nplr)
 
 
-.drda_fit <- function(df){
+.drda_fit <- function(df, npar=5){
   x <- df$.x
   y <- df$.y
   
@@ -19,26 +19,43 @@ library(nplr)
   qcY <- y[df$`Sample type` == 'QC']
   
   
+  if(npar==5){
+    meanFunc <- 'logistic5'
+  }else if(npar == 4){
+    meanFunc <- 'logistic4'
+  }
+  
   
   mdl <- drda(y ~ x, data = data.frame( x=stdX, y=stdY ), 
-              mean_function = 'logistic5',
+              mean_function = meanFunc,
               is_log=TRUE)
   
   
   w <- 1 / ( (stdY)**2  )
   mdlWeight <- drda(y ~ x, data = data.frame( x=stdX, y=stdY ), 
-                    mean_function = 'logistic5',
+                    mean_function = meanFunc,
                     weights = w, 
                     is_log=TRUE)
   
   coeff <- unlist( mdl$coefficients, use.names = FALSE)
   
-  qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-              (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  if(npar==5){
+    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  }else if(npar == 4){
+    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
+  }
+  
   
   coeff <- unlist( mdlWeight$coefficients, use.names = FALSE)
-  qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-               (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi']) ))^(1 / coeff['nu'])  ) ) * maxY
+  if(npar==5){
+    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  }else if(npar == 4){
+    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
+  }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
   colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
@@ -50,13 +67,18 @@ library(nplr)
     responseW=qcYwp,
     logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
-    npar=5
+    npar=npar
   ) 
   
   return(outDf)
 }
 
-.nplr_fit <- function(df){
+
+
+
+
+
+.nplr_fit <- function(df, npar=5){
   x <- df$.x
   y <- df$.y
   
@@ -69,27 +91,37 @@ library(nplr)
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
   
-  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))^S
-  # where B and T are the bottom and top asymptotes, and b, xmid and s are the Hill slope, the x-coordinate
-  # at the inflexion point and an asymetric coefficient, respectively.
-  
-  mdlU <- nplr(stdX, stdY, npars=5, useLog=FALSE, silent = TRUE)
+
+  mdlU <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE)
   
   coeff <- getPar(mdlU  )$params
   
-  qcYp <- (coeff[['bottom']] + 
-             (coeff[['top']] - coeff[['bottom']])/
-             ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY
+  if(npar == 5){
+    qcYp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+  }else if(npar == 4){
+    qcYp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+  }
   
   
-  #getFitValues(mdlU)
+  
+  # getFitValues(mdlU)
   # getInflexion(mdlU)
-  mdlW <- nplr(stdX, stdY, npars=5, useLog=FALSE, silent = TRUE,
+  mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
                method='gw', LPweight=2)
   
-  qcYwp <- (coeff[['bottom']] + 
-              (coeff[['top']] - coeff[['bottom']])/
-              ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY
+  if(npar == 5){
+    qcYwp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+  }else if(npar == 4){
+    qcYwp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+  }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
   colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
@@ -101,7 +133,7 @@ library(nplr)
     responseW=qcYwp,
     logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
-    npar=5
+    npar=npar
   ) 
   
   return(outDf)
@@ -134,11 +166,12 @@ if( !("Sample type" %in% colorNames) ){
 }
 
 
-lib <- 'nplr'
+lib  <- 'nplr'
+npar <- 5
 
 ctx %>%
   select( .y, .x, .ci, .ri, 'Sample type'  ) %>%
   group_by(.ri) %>%
-  do( do.curvefit(., lib) ) %>%
+  do( do.curvefit(., lib, npar) ) %>%
   ctx$addNamespace() %>%
   ctx$save()

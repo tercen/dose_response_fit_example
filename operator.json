@@ -4,7 +4,29 @@
   "tags": ["curve fitting"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/template_R_operator"],
-  "properties": []
+  "properties": [
+    {
+    "kind": "EnumeratedProperty",
+    "name": "Fitting Library",
+    "defaultValue":"nplr",
+    "values":[
+      "nplr",
+      "drda"
+    ],
+    "description": ""
+    },
+    
+    {
+    "kind": "EnumeratedProperty",
+    "name": "Model",
+    "defaultValue":"5PL",
+    "values":[
+      "5PL",
+      "4PL"
+    ],
+    "description": ""
+    }
+  ]
 }
 
 

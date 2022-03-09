@@ -8,6 +8,7 @@ library(nplr)
 options("tercen.workflowId" = "22ae949dc1a3dd3daf96768225009600")
 options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
 
+
 .drda_fit <- function(df, npar=5){
   x <- df$.x
   y <- df$.y
@@ -22,26 +23,43 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   qcY <- y[df$`Sample type` == 'QC']
   
   
+  if(npar==5){
+    meanFunc <- 'logistic5'
+  }else if(npar == 4){
+    meanFunc <- 'logistic4'
+  }
+  
   
   mdl <- drda(y ~ x, data = data.frame( x=stdX, y=stdY ), 
-              mean_function = 'logistic5',
+              mean_function = meanFunc,
               is_log=TRUE)
   
   
   w <- 1 / ( (stdY)**2  )
   mdlWeight <- drda(y ~ x, data = data.frame( x=stdX, y=stdY ), 
-                    mean_function = 'logistic5',
+                    mean_function = meanFunc,
                     weights = w, 
                     is_log=TRUE)
   
   coeff <- unlist( mdl$coefficients, use.names = FALSE)
   
-  qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-              (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  if(npar==5){
+    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  }else if(npar == 4){
+    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
+  }
+  
   
   coeff <- unlist( mdlWeight$coefficients, use.names = FALSE)
-  qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-               (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi']) ))^(1 / coeff['nu'])  ) ) * maxY
+  if(npar==5){
+    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                 (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+  }else if(npar == 4){
+    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
+                 (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
+  }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
   colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
@@ -77,15 +95,8 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
   
-  # 4PL
-  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))
   
-  # 5PL
-  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))^S
-  # where B and T are the bottom and top asymptotes, and b, xmid and s are the Hill slope, the x-coordinate
-  # at the inflexion point and an asymetric coefficient, respectively.
-  
-  mdlU <- nplr(stdX, stdY, npars=5, useLog=FALSE, silent = TRUE)
+  mdlU <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE)
   
   coeff <- getPar(mdlU  )$params
   
@@ -101,9 +112,9 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   
   
   
-  #getFitValues(mdlU)
+  # getFitValues(mdlU)
   # getInflexion(mdlU)
-  mdlW <- nplr(stdX, stdY, npars=5, useLog=FALSE, silent = TRUE,
+  mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
                method='gw', LPweight=2)
   
   if(npar == 5){
@@ -144,7 +155,11 @@ do.curvefit <- function(df, lib){
   return(outDf)
 }
 
-
+# =======================================================
+#
+#               Operator entry point
+#
+# =======================================================
 ctx = tercenCtx()
 
 rowNames <- ctx$rnames
@@ -158,9 +173,27 @@ if( !("Sample type" %in% colorNames) ){
   error("Color 'Sample type' is mandatory."  )
 }
 
-
+# Read in operator parameters
 lib  <- 'nplr'
 npar <- 5
+
+operatorProps <- ctx$query$operatorSettings$operatorRef$propertyValues
+
+for( prop in operatorProps ){
+  if (prop$name == "Fitting Library"){
+    lib <- prop$value
+  }
+  
+  if (prop$name == "Model"){
+    mdlChoice <- prop$value
+    if(mdlChoice == '4PL'){
+      npar <- 4
+    }else if(mdlChoice == '5PL'){
+      npar <- 5
+    }
+  }
+}
+
 
 ctx %>%
   select( .y, .x, .ci, .ri, 'Sample type'  ) %>%
