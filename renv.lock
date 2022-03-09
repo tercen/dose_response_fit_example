@@ -78,6 +78,13 @@
       "Repository": "RSPM",
       "Hash": "01c82e3b053eb7660a8ace8d932265b8"
     },
+    "drda": {
+      "Package": "drda",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a2b4082ab238edeafe4dbc9ea8f73d09"
+    },
     "ellipsis": {
       "Package": "ellipsis",
       "Version": "0.3.1",
@@ -126,6 +133,13 @@
       "Source": "Repository",
       "Repository": "TERCEN",
       "Hash": "27b03b2685b9424f08521ea09d24860e"
+    },
+    "nplr": {
+      "Package": "nplr",
+      "Version": "0.1-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9d9f8eed47bc1b22856401d58b06ac51"
     },
     "openssl": {
       "Package": "openssl",
