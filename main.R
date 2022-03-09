@@ -67,7 +67,7 @@ library(nplr)
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    logConcentration=qcX,
+    .x=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
@@ -135,14 +135,13 @@ library(nplr)
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    logConcentration=qcX,
+    .x=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
   
   return(outDf)
 }
-
 
 do.curvefit <- function(df, lib){
   
@@ -154,6 +153,10 @@ do.curvefit <- function(df, lib){
     outDf <- rbind( outDf, .nplr_fit(df, npar=5) )
   }
   
+  #dat %>% mutate(across(where(is.factor), as.character))
+  outDf <- outDf %>%
+    mutate(across(npar, as.integer)) %>%
+    as_tibble()
   
   return(outDf)
 }

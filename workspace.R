@@ -71,7 +71,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    logConcentration=qcX,
+    .x=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
@@ -139,7 +139,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    logConcentration=qcX,
+    .x=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
@@ -157,6 +157,10 @@ do.curvefit <- function(df, lib){
     outDf <- rbind( outDf, .nplr_fit(df, npar=5) )
   }
   
+  #dat %>% mutate(across(where(is.factor), as.character))
+  outDf <- outDf %>%
+    mutate(across(npar, as.integer)) %>%
+    as_tibble()
   
   return(outDf)
 }
