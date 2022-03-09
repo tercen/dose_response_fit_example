@@ -19,7 +19,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   maxY <- max(stdY)
   minY <- min(stdY)
   
-  stdY <- (stdY - minY)/ (maxY-minY)
+  stdY <- stdY / maxY
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']

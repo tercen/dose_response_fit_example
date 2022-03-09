@@ -15,7 +15,7 @@ library(nplr)
   maxY <- max(stdY)
   minY <- min(stdY)
   
-  stdY <- (stdY - minY)/ (maxY-minY)
+  stdY <- stdY / maxY
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
