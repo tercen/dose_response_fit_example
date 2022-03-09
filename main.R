@@ -116,7 +116,7 @@ library(nplr)
   # getInflexion(mdlU)
   mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
                method='gw', LPweight=2)
-  
+  coeff <- getPar(mdlW  )$params
   if(npar == 5){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/

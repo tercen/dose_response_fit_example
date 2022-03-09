@@ -118,9 +118,10 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   
   # getFitValues(mdlU)
   # getInflexion(mdlU)
+  
   mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
                method='gw', LPweight=2)
-  
+  coeff <- getPar(mdlW  )$params
   if(npar == 5){
     qcYwp <- (coeff[['bottom']] + 
                 (coeff[['top']] - coeff[['bottom']])/
