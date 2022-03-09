@@ -143,12 +143,12 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   return(outDf)
 }
 
-do.curvefit <- function(df, lib){
+do.curvefit <- function(df, lib, npar=5){
   
   if( lib == 'drda'){
-    outDf <- .drda_fit(df)
+    outDf <- .drda_fit(df, npar)
   }else if( lib == 'nplr' ){
-    outDf <- .nplr_fit(df)
+    outDf <- .nplr_fit(df, npar)
   }
   
   

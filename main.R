@@ -139,12 +139,13 @@ library(nplr)
   return(outDf)
 }
 
-do.curvefit <- function(df, lib){
+
+do.curvefit <- function(df, lib, npar=5){
   
   if( lib == 'drda'){
-    outDf <- .drda_fit(df)
+    outDf <- .drda_fit(df, npar)
   }else if( lib == 'nplr' ){
-    outDf <- .nplr_fit(df)
+    outDf <- .nplr_fit(df, npar)
   }
   
   
