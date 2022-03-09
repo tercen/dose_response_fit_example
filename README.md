@@ -26,8 +26,8 @@ Output relations|.
 
 Models used to fit the data|.
 ---|---
-`nplr 4PL`      | yfit = B + (T-B) / (1 + exp(b*(xmid-x)))
-`nplr 5PL`      | yfit = B + (T-B) / (1 + exp(b*(xmid-x)))^s
+`nplr 4PL`      | yfit = B + (T-B) / (1 + 10^(b*(xmid-x)))
+`nplr 5PL`      | yfit = B + (T-B) / (1 + 10^(b*(xmid-x)))^s
 `drda 4PL`      | yfit = &alpha; + (&beta; - &alpha;) / ( 1 * exp(-&eta; * (x - &phi;)))
 `drda 5PL`      | yfit = &alpha; + (&beta; - &alpha;) / ( 1 + &nu; * exp(-&eta; * (x - &phi;)))^(1/&nu;)
 

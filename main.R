@@ -9,11 +9,13 @@ library(nplr)
   x <- df$.x
   y <- df$.y
   
-  maxY <- max(y)
-  y <- y / maxY
-  
   stdX <- x[df$`Sample type` == 'Standard']
   stdY <- y[df$`Sample type` == 'Standard']
+  
+  maxY <- max(stdY)
+  minY <- min(stdY)
+  
+  stdY <- (stdY - minY)/ (maxY-minY)
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
@@ -51,10 +53,10 @@ library(nplr)
   coeff <- unlist( mdlWeight$coefficients, use.names = FALSE)
   if(npar==5){
     qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
+                 (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
   }else if(npar == 4){
     qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
+                 (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
   }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
@@ -82,16 +84,18 @@ library(nplr)
   x <- df$.x
   y <- df$.y
   
-  maxY <- max(y)
-  y <- y / maxY
-  
   stdX <- x[df$`Sample type` == 'Standard']
   stdY <- y[df$`Sample type` == 'Standard']
+  
+  maxY <- max(stdY)
+  minY <- min(stdY)
+  
+  stdY <- (stdY - minY)/ (maxY-minY)
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
   
-
+  
   mdlU <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE)
   
   coeff <- getPar(mdlU  )$params
@@ -99,11 +103,11 @@ library(nplr)
   if(npar == 5){
     qcYp <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
     qcYp <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
   }
   
   
@@ -115,12 +119,12 @@ library(nplr)
   
   if(npar == 5){
     qcYwp <- (coeff[['bottom']] + 
-               (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+                (coeff[['top']] - coeff[['bottom']])/
+                ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
     qcYwp <- (coeff[['bottom']] + 
-               (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+                (coeff[['top']] - coeff[['bottom']])/
+                ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
   }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
@@ -139,7 +143,6 @@ library(nplr)
   return(outDf)
 }
 
-
 do.curvefit <- function(df, lib, npar=5){
   
   if( lib == 'drda'){
@@ -152,7 +155,11 @@ do.curvefit <- function(df, lib, npar=5){
   return(outDf)
 }
 
-
+# =======================================================
+#
+#               Operator entry point
+#
+# =======================================================
 ctx = tercenCtx()
 
 rowNames <- ctx$rnames
@@ -166,9 +173,27 @@ if( !("Sample type" %in% colorNames) ){
   error("Color 'Sample type' is mandatory."  )
 }
 
-
+# Read in operator parameters
 lib  <- 'nplr'
 npar <- 5
+
+operatorProps <- ctx$query$operatorSettings$operatorRef$propertyValues
+
+for( prop in operatorProps ){
+  if (prop$name == "Fitting Library"){
+    lib <- prop$value
+  }
+  
+  if (prop$name == "Model"){
+    mdlChoice <- prop$value
+    if(mdlChoice == '4PL'){
+      npar <- 4
+    }else if(mdlChoice == '5PL'){
+      npar <- 5
+    }
+  }
+}
+
 
 ctx %>%
   select( .y, .x, .ci, .ri, 'Sample type'  ) %>%

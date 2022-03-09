@@ -13,11 +13,13 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   x <- df$.x
   y <- df$.y
   
-  maxY <- max(y)
-  y <- y / maxY
-  
   stdX <- x[df$`Sample type` == 'Standard']
   stdY <- y[df$`Sample type` == 'Standard']
+  
+  maxY <- max(stdY)
+  minY <- min(stdY)
+  
+  stdY <- (stdY - minY)/ (maxY-minY)
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
@@ -86,11 +88,13 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   x <- df$.x
   y <- df$.y
   
-  maxY <- max(y)
-  y <- y / maxY
-  
   stdX <- x[df$`Sample type` == 'Standard']
   stdY <- y[df$`Sample type` == 'Standard']
+  
+  maxY <- max(stdY)
+  minY <- min(stdY)
+  
+  stdY <- (stdY - minY)/ (maxY-minY)
   
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
@@ -103,11 +107,11 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   if(npar == 5){
     qcYp <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
     qcYp <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
   }
   
   
