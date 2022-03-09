@@ -8,8 +8,7 @@ library(nplr)
 options("tercen.workflowId" = "22ae949dc1a3dd3daf96768225009600")
 options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
 
-
-.drda_fit <- function(df){
+.drda_fit <- function(df, npar=5){
   x <- df$.x
   y <- df$.y
   
@@ -54,13 +53,18 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     responseW=qcYwp,
     logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
-    npar=5
+    npar=npar
   ) 
   
   return(outDf)
 }
 
-.nplr_fit <- function(df){
+
+
+
+
+
+.nplr_fit <- function(df, npar=5){
   x <- df$.x
   y <- df$.y
   
@@ -73,6 +77,10 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   qcX <- x[df$`Sample type` == 'QC']
   qcY <- y[df$`Sample type` == 'QC']
   
+  # 4PL
+  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))
+  
+  # 5PL
   # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))^S
   # where B and T are the bottom and top asymptotes, and b, xmid and s are the Hill slope, the x-coordinate
   # at the inflexion point and an asymetric coefficient, respectively.
@@ -81,9 +89,16 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   
   coeff <- getPar(mdlU  )$params
   
-  qcYp <- (coeff[['bottom']] + 
-             (coeff[['top']] - coeff[['bottom']])/
-             ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY
+  if(npar == 5){
+    qcYp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+  }else if(npar == 4){
+    qcYp <- (coeff[['bottom']] + 
+               (coeff[['top']] - coeff[['bottom']])/
+               ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+  }
+  
   
   
   #getFitValues(mdlU)
@@ -91,9 +106,15 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   mdlW <- nplr(stdX, stdY, npars=5, useLog=FALSE, silent = TRUE,
                method='gw', LPweight=2)
   
-  qcYwp <- (coeff[['bottom']] + 
-              (coeff[['top']] - coeff[['bottom']])/
-              ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY
+  if(npar == 5){
+    qcYwp <- (coeff[['bottom']] + 
+                (coeff[['top']] - coeff[['bottom']])/
+                ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+  }else if(npar == 4){
+    qcYwp <- (coeff[['bottom']] + 
+                (coeff[['top']] - coeff[['bottom']])/
+                ((1 + exp(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+  }
   
   rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
   colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
@@ -105,7 +126,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     responseW=qcYwp,
     logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
-    npar=5
+    npar=npar
   ) 
   
   return(outDf)
@@ -138,11 +159,12 @@ if( !("Sample type" %in% colorNames) ){
 }
 
 
-lib <- 'nplr'
+lib  <- 'nplr'
+npar <- 5
 
 ctx %>%
   select( .y, .x, .ci, .ri, 'Sample type'  ) %>%
   group_by(.ri) %>%
-  do( do.curvefit(., lib) ) %>%
+  do( do.curvefit(., lib, npar) ) %>%
   ctx$addNamespace() %>%
   ctx$save()
