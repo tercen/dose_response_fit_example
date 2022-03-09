@@ -1,7 +1,7 @@
 {
-  "name": "Template_R_operator",
-  "description": "Calculate the mathamatical average of the data points in a cell.",
-  "tags": ["basic statistics"],
+  "name": "dose_response_fit_operator",
+  "description": "Fits a non-linear dose-response curve using the 4PL or 5Pl models as implemented by either nplr or drda packages.",
+  "tags": ["curve fitting"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/template_R_operator"],
   "properties": []
