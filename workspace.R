@@ -147,12 +147,14 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
   return(outDf)
 }
 
-do.curvefit <- function(df, lib, npar=5){
+do.curvefit <- function(df, lib){
   
   if( lib == 'drda'){
-    outDf <- .drda_fit(df, npar)
+    outDf <- .drda_fit(df, npar=4)
+    outDf <- rbind( outDf, .drda_fit(df, npar=5) )
   }else if( lib == 'nplr' ){
-    outDf <- .nplr_fit(df, npar)
+    outDf <- .nplr_fit(df, npar=4)
+    outDf <- rbind( outDf, .nplr_fit(df, npar=5) )
   }
   
   
@@ -179,7 +181,6 @@ if( !("Sample type" %in% colorNames) ){
 
 # Read in operator parameters
 lib  <- 'nplr'
-npar <- 5
 
 operatorProps <- ctx$query$operatorSettings$operatorRef$propertyValues
 
@@ -187,21 +188,12 @@ for( prop in operatorProps ){
   if (prop$name == "Fitting Library"){
     lib <- prop$value
   }
-  
-  if (prop$name == "Model"){
-    mdlChoice <- prop$value
-    if(mdlChoice == '4PL'){
-      npar <- 4
-    }else if(mdlChoice == '5PL'){
-      npar <- 5
-    }
-  }
 }
 
 
 ctx %>%
   select( .y, .x, .ci, .ri, 'Sample type'  ) %>%
   group_by(.ri) %>%
-  do( do.curvefit(., lib, npar) ) %>%
+  do( do.curvefit(., lib ) ) %>%
   ctx$addNamespace() %>%
   ctx$save()

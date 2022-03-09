@@ -14,17 +14,6 @@
       "drda"
     ],
     "description": ""
-    },
-    
-    {
-    "kind": "EnumeratedProperty",
-    "name": "Model",
-    "defaultValue":"5PL",
-    "values":[
-      "5PL",
-      "4PL"
-    ],
-    "description": ""
     }
   ]
 }
