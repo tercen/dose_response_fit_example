@@ -1,38 +1,21 @@
-# Template R operator
-
-The `Template R operator` is a template repository for the creation of R operators in Tercen. An overview of steps for developing an operator are:
-
-1. create a github repo
-2. install tercen_studio
-3. login to tercen_studio
-4. git clone the newly created repo
-5. start developing in R in tercen_studio
-6. add R packages to the repo
-7. push to the github repo
-8. go to tercen and install the operator
-
-More information can be found in [Tercen app builder's guide](https://tercen.github.io/appbuilders-guide/).
-
-Below is the operator README standard structure:
-
 ##### Description
 
-The `Template R operator` is a template repository for the creation of R operators in Tercen.
+Fits a non-linear dose-response curve using the 4PL or 5Pl models as implemented by either `nplr` or `drda` packages in R.
 
 ##### Usage
 
 Input projection|.
 ---|---
-`x-axis`        | type, description 
-`y-axis`        | type, description 
-`row`           | type, description 
-`column`        | type, description 
-`colors`        | type, description 
-`labels`        | type, description 
+`x-axis`        | numeric (log10), Concentration
+`y-axis`        | numeric, Dose response
+`row`           | 'Assay ID' (mandatory)
+`colors`        | char, 'Sample type', Binary, QC or Standard
+
 
 Input parameters|.
 ---|---
-`input_var`        | parameter description
+`Library`        | Either nplr or drda: library used to perform curve fitting
+`Model`          | Either 4PL or 5PL: Number of parameters in the model used to fit
 
 Output relations|.
 ---|---
@@ -45,6 +28,6 @@ Details on the computation.
 
 ##### See Also
 
-[template_shiny_operator](https://github.com/tercen/template_shiny_operator)
-, [template_docker_operator](https://github.com/tercen/template_docker_operator)
+[nonlinear_regression_operator](https://github.com/tercen/nonlinear_regression_operator)
+
 
