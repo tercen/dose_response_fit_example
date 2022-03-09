@@ -32,16 +32,16 @@ Models used to fit the data|.
 `drda 5PL`      | yfit = &alpha; + (&beta; - &alpha;) / ( 1 + &nu; * exp(-&eta; * (x - &phi;)))^(1/&nu;)
 
 Where:
- `nplr`
+ `nplr`  
  B: Bottom asymptote  
  T: Top asymptote  
  b: Hill slope  
  xmid: x-coordinate at inflection point  
  s: asymmetric coefficient  
  
- `drda`
+ `drda`  
   &alpha; : lower asymptote  
-  &betaa; : upper asymptote  
+  &beta; : upper asymptote  
   &eta; : Steepness of the curve (growth rate)  
   &phi; : Related to the value of the function at x = 0  
   &nu; : Affects asymptote near which maximum growth occurs  
@@ -53,16 +53,6 @@ Further reading:
 [nplr vignette](https://cran.r-project.org/web/packages/nplr/vignettes/nplr.pdf)
 [drda vignette](https://cran.r-project.org/web/packages/drda/vignettes/drda.pdf)
 
-
-Details on the computation.
-
-  # 4PL
-  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))
-  
-  # 5PL
-  # formula y = B + (T-B) / (1 + exp(b*(xmid-x)))^S
-  # where B and T are the bottom and top asymptotes, and b, xmid and s are the Hill slope, the x-coordinate
-  # at the inflexion point and an asymetric coefficient, respectively.
 
 ##### See Also
 
