@@ -71,7 +71,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    .x=qcX,
+    logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
@@ -139,7 +139,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
     .ci=colIdx,
     responseU=qcYp,
     responseW=qcYwp,
-    .x=qcX,
+    logConcentration=qcX,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
