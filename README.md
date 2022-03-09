@@ -6,7 +6,7 @@ Fits a non-linear dose-response curve using the 4PL or 5Pl models as implemented
 
 Input projection|.
 ---|---
-`x-axis`        | numeric (log10), Concentration
+`column`        | numeric (log10), Concentration
 `y-axis`        | numeric, Dose response
 `row`           | 'Assay ID' (mandatory)
 `colors`        | char, 'Sample type', Binary, QC or Standard

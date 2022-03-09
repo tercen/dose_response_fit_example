@@ -85,7 +85,7 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
 
 
 .nplr_fit <- function(df, npar=5){
-  x <- df$.x
+  x <- df$log
   y <- df$.y
   
   stdX <- x[df$`Sample type` == 'Standard']
@@ -131,12 +131,10 @@ options("tercen.stepId"     = "d72f5099-6ecf-4944-8f33-99d0ef0e8909")
                 ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
   }
   
-  rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
-  colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
-  
+
   outDf <- data.frame(
-    .ri=rowIdx,
-    .ci=colIdx,
+    .ri=df$.ri[df$`Sample type` == 'QC'],
+    .ci=df$.ci[df$`Sample type` == 'QC'],
     responseU=qcYp,
     responseW=qcYwp,
     logConcentration=qcX,
@@ -157,7 +155,6 @@ do.curvefit <- function(df, lib){
     outDf <- rbind( outDf, .nplr_fit(df, npar=5) )
   }
   
-  #dat %>% mutate(across(where(is.factor), as.character))
   outDf <- outDf %>%
     mutate(across(npar, as.integer)) %>%
     as_tibble()
@@ -173,14 +170,32 @@ do.curvefit <- function(df, lib){
 ctx = tercenCtx()
 
 rowNames <- ctx$rnames
+
+cnames.with.ns <- ctx$cnames
+
+
+cnames.without.ns <- unlist(lapply( cnames.with.ns, function(x) {
+  if( !startsWith(x, '.') ){
+    x<-strsplit(x, '\\.')[[1]][2]
+  }else{
+    x
+  }
+}))
+
+
 colorNames <- ctx$colors
 
 if( !("Assay ID" %in% rowNames) ){
-  error("Row 'Assay ID' is mandatory."  )
+  stop("Row 'Assay ID' is mandatory."  )
+}
+
+
+if( !("log" %in% cnames.without.ns) ){
+  stop("Column 'log' is mandatory."  )
 }
 
 if( !("Sample type" %in% colorNames) ){
-  error("Color 'Sample type' is mandatory."  )
+  stop("Color 'Sample type' is mandatory."  )
 }
 
 # Read in operator parameters
@@ -194,9 +209,15 @@ for( prop in operatorProps ){
   }
 }
 
+col <- ctx$cselect() 
 
-ctx %>%
-  select( .y, .x, .ci, .ri, 'Sample type'  ) %>%
+names(col) <- cnames.without.ns
+
+col <- mutate(col, .ci=seq(0,nrow(col)-1))
+
+ctx %>%  
+  select( .y, .ci, .ri, 'Sample type'  ) %>%  
+  left_join(col, by=".ci") %>%
   group_by(.ri) %>%
   do( do.curvefit(., lib ) ) %>%
   ctx$addNamespace() %>%
