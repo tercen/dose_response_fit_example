@@ -33,18 +33,18 @@ Models used to fit the data|.
 
 Where:
  `nplr`
- B: Bottom asymptote
- T: Top asymptote
- b: Hill slope
- xmid: x-coordinate at inflection point
- s: asymmetric coefficient
+ B: Bottom asymptote  
+ T: Top asymptote  
+ b: Hill slope  
+ xmid: x-coordinate at inflection point  
+ s: asymmetric coefficient  
  
  `drda`
-  &alpha;: lower asymptote
-  &betaa;: upper asymptote
-  &eta;: Steepness of the curve (growth rate)
-  &phi;: Related to the value of the function at x = 0
-  &nu;: Affects asymptote near which maximum growth occurs
+  &alpha; : lower asymptote  
+  &betaa; : upper asymptote  
+  &eta; : Steepness of the curve (growth rate)  
+  &phi; : Related to the value of the function at x = 0  
+  &nu; : Affects asymptote near which maximum growth occurs  
 
 Further reading:
 
