@@ -31,7 +31,7 @@ Models used to fit the data|.
 `drda 4PL`      | yfit = &alpha; + (&beta; - &alpha;) / ( 1 * exp(-&eta; * (x - &phi;)))
 `drda 5PL`      | yfit = &alpha; + (&beta; - &alpha;) / ( 1 + &nu; * exp(-&eta; * (x - &phi;)))^(1/&nu;)
 
-Where:
+Where:  
  `nplr`  
  B: Bottom asymptote  
  T: Top asymptote  
@@ -46,7 +46,7 @@ Where:
   &phi; : Related to the value of the function at x = 0  
   &nu; : Affects asymptote near which maximum growth occurs  
 
-Further reading:
+Further reading:  
 
 [Introduction to non-linear regression](https://www.statforbiology.com/nonlinearregression/usefulequations).  
 [Nonlinear regression on Wikipedia](https://en.wikipedia.org/wiki/Nonlinear_regression).  
