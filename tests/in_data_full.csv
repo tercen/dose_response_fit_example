@@ -1,4 +1,4 @@
-"",".sids",".tlbIdx",".y",".axisIndex",".ci",".ri",".nValuesPerXLevel",".xSeqPerLevels",".xLevels",".nXLevels",".xs",".cri",".ys",".y0s","Assay.ID","ds0.log","Sample.type","Sample.ID"
+"",".sids",".tlbIdx",".y",".axisIndex",".ci",".ri",".nValuesPerXLevel",".xSeqPerLevels",".xLevels",".nXLevels",".xs",".cri",".ys",".y0s","Assay ID","ds0.log","Sample type","Sample ID"
 "1",11,0,5,0,0,0,1,0,0,1,32767,0,32767,32767,"Assay 1",0.698970004336019,"Standard","STD12"
 "2",10,0,10,0,0,1,1,0,0,1,32767,2,32767,32767,"Assay 1",1,"Standard","STD11"
 "3",9,0,20,0,0,2,1,0,0,1,32767,8,32767,32767,"Assay 1",1.30102999566398,"Standard","STD10"

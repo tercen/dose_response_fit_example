@@ -5,9 +5,9 @@
   "inputDataUri": "in_data_full.csv",
   "outputDataUri": ["table1.csv", "table2.csv", "table3.csv"],
   "columns": ["ds0.log"],
-  "rows": ["Assay.ID"],
-  "colors": ["Sample.type"],
-  "labels": ["Sample.ID"],
+  "rows": ["Assay ID"],
+  "colors": ["Sample type"],
+  "labels": ["Sample ID"],
   "yAxis": ".y",
   "xAxis": ""
 }
