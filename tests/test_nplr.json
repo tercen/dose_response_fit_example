@@ -8,6 +8,6 @@
   "rows": ["Assay.ID"],
   "colors": ["Sample.type"],
   "labels": ["Sample.ID"],
-  "yAxis": "[nominal] ng/ml",
+  "yAxis": ".y",
   "xAxis": ""
 }
