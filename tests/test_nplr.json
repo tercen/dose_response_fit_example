@@ -2,12 +2,12 @@
   "kind": "OperatorUnitTest",
   "name": "test nplr",
   "namespace": "ds11",
-  "inputDataUri": ["in_data.csv", "in_data_r.csv"],
+  "inputDataUri": "in_data.csv",
   "outputDataUri": ["table1.csv", "table2.csv", "table3.csv"],
   "columns": ["ds0.log"],
-  "rows": ["Assay ID"],
-  "colors": ["Sample type"],
-  "labels": ["Sample ID"],
+  "rows": ["Assay.ID"],
+  "colors": ["Sample.type"],
+  "labels": ["Sample.ID"],
   "yAxis": "[nominal] ng/ml",
   "xAxis": ""
 }
