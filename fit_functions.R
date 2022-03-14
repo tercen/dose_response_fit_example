@@ -147,7 +147,7 @@ do.curvefit <- function(df, lib){
   }
   
   outDf <- outDf %>%
-    mutate(across(npar, as.integer)) %>%
+    #mutate(across(npar, as.integer)) %>%
     as_tibble()
   
   return(outDf)
