@@ -1,7 +1,7 @@
 {
   "kind": "OperatorUnitTest",
   "name": "test nplr",
-  "namespace": "ds11",
+  "namespace": "ds14",
   "inputDataUri": "in_data_full.csv",
   "outputDataUri": ["table1.csv", "table2.csv", "table3.csv"],
   "columns": ["ds0.log"],
