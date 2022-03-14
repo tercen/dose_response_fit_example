@@ -9,5 +9,7 @@
   "colors": ["Sample type"],
   "labels": ["Sample ID"],
   "yAxis": ".y",
-  "xAxis": ""
+  "xAxis": "",
+  "absTol": 1e-5,
+  "relTol": 1e-5
 }
