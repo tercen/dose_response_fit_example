@@ -10,6 +10,5 @@
   "labels": ["Sample ID"],
   "yAxis": ".y",
   "xAxis": "",
-  "absTol": 1e-5,
-  "relTol": 1e-5
+  "relTol": 0.05
 }
