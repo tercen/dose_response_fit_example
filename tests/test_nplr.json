@@ -10,6 +10,7 @@
   "labels": ["Sample ID"],
   "yAxis": "[nominal] ng/mL",
   "xAxis": "",
-  "relTol": 0.02
+  "equalityMethod": "R2",
+  "r2": 0.90
 }
 
