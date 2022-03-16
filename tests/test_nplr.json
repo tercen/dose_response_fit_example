@@ -8,7 +8,7 @@
   "rows": ["Assay ID"],
   "colors": ["Sample type"],
   "labels": ["Sample ID"],
-  "yAxis": ".y",
+  "yAxis": "[nominal] ng/mL",
   "xAxis": "",
   "relTol": 0.02
 }
