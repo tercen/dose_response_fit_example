@@ -2,7 +2,7 @@
   "kind": "OperatorUnitTest",
   "name": "test nplr",
   "namespace": "ds14",
-  "inputDataUri": "in_data_full.csv",
+  "inputDataUri": "in_data_r.csv",
   "outputDataUri": ["table1.csv", "table2.csv", "table3.csv"],
   "columns": ["ds0.log"],
   "rows": ["Assay ID"],
@@ -10,5 +10,6 @@
   "labels": ["Sample ID"],
   "yAxis": ".y",
   "xAxis": "",
-  "relTol": 0.05
+  "relTol": 0.02
 }
+
