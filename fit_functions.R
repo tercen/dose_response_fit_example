@@ -38,22 +38,55 @@ library(nplr)
                     is_log=TRUE)
   
   #coeff <- unlist( mdl$coefficients, use.names = FALSE)
-  #browser()
+  
   
 
   qcXp  <- unlist(lapply(qcY, function(yhat) approx(x = mdl$fitted.values, y = stdX, xout = yhat/maxY)$y ))
-  qcXwp <- unlist(lapply(qcY, function(yhat) approx(x = mdl$fitted.values, y = stdX, xout = yhat/maxY)$y ))
-
+  qcXwp <- unlist(lapply(qcY, function(yhat) approx(x = mdlWeight$fitted.values, y = stdX, xout = yhat/maxY)$y ))
+ 
+  x_prediction <- 10^(seq(-1,1,0.05) )
   
-  rowIdx <- rep( unique(df$.ri)[1], length(qcXp) )
-  colIdx <- rep( unique(df$.ci)[1], length(qcXp) )
+  x_prediction <- append(x_prediction, qcXp  )
+  x_prediction <- append(x_prediction, qcXwp  )
+  x_prediction <- sort(x_prediction)
+  
+  x_prediction<- x_prediction[x_prediction>=min(stdX) & x_prediction<=max(stdX) ]
+  
+  y_prediction <- predict(mdl, x_prediction)*maxY
+  
+  
+  conc_u <- y_prediction * NA
+  conc_w <- y_prediction * NA
+  resp_u <- y_prediction * NA
+  resp_w <- y_prediction * NA
+  
+  
+  for( i in seq(1, length(x_prediction))){
+    if( x_prediction[i] %in% qcXp ){
+      conc_u[i] <- x_prediction[i]
+      resp_u[i] <- y_prediction[i]
+    }
+    
+    if( x_prediction[i] %in% qcXwp ){
+      conc_w[i] <- x_prediction[i]
+      resp_w[i] <- y_prediction[i]
+    }
+  }
+  
+  
+  rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )
+  colIdx <- rep( unique(df$.ci)[1], length(conc_u) )
   
   outDf <- data.frame(
     .ri=rowIdx,
     .ci=colIdx,
-    concentrationU=qcXp,
-    concetrationW=qcXwp,
-    diff=(1-(qcYwp/qcYp))*100,
+    concentrationU=conc_u,
+    concentrationW=conc_w,
+    responseU=resp_u,
+    responseW=resp_w,
+    x_predicted=x_prediction,
+    y_predicted=y_prediction,
+    diff=(1-(conc_w/conc_u))*100,
     npar=npar
   ) 
   
@@ -81,45 +114,72 @@ library(nplr)
   
   mdlU <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE)
   
+  mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
+               method='gw', LPweight=2)
   
-  browser()
+  
+  qcXp  <- getEstimates(mdlU,qcY/maxY)$x
+  qcXwp <- getEstimates(mdlW,qcY/maxY)$x
+  
+
+  x_prediction <- 10^(seq(-1,1,0.05) )
+  
+  x_prediction <- append(x_prediction, qcXp  )
+  x_prediction <- append(x_prediction, qcXwp  )
+  x_prediction <- sort(x_prediction)
+  
+  x_prediction<- x_prediction[x_prediction>=min(stdX) & x_prediction<=max(stdX) ]
+  
+  
   coeff <- getPar(mdlU  )$params
   
   if(npar == 5){
-    qcYp <- (coeff[['bottom']] + 
+    y_prediction <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) )^coeff[['s']])) * maxY  
   }else if(npar == 4){
-    qcYp <- (coeff[['bottom']] + 
+    y_prediction <- (coeff[['bottom']] + 
                (coeff[['top']] - coeff[['bottom']])/
-               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) ))) * maxY
   }
   
   
   
-  # getFitValues(mdlU)
-  # getInflexion(mdlU)
   
-  mdlW <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE,
-               method='gw', LPweight=2)
-  coeff <- getPar(mdlW  )$params
-  if(npar == 5){
-    qcYwp <- (coeff[['bottom']] + 
-                (coeff[['top']] - coeff[['bottom']])/
-                ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) )^coeff[['s']])) * maxY  
-  }else if(npar == 4){
-    qcYwp <- (coeff[['bottom']] + 
-                (coeff[['top']] - coeff[['bottom']])/
-                ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-qcX) ) ))) * maxY
+  
+  
+  conc_u <- y_prediction * NA
+  conc_w <- y_prediction * NA
+  resp_u <- y_prediction * NA
+  resp_w <- y_prediction * NA
+  
+  
+  for( i in seq(1, length(x_prediction))){
+    if( x_prediction[i] %in% qcXp ){
+      conc_u[i] <- x_prediction[i]
+      resp_u[i] <- y_prediction[i]
+    }
+    
+    if( x_prediction[i] %in% qcXwp ){
+      conc_w[i] <- x_prediction[i]
+      resp_w[i] <- y_prediction[i]
+    }
   }
   
+  
+  rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )
+  colIdx <- rep( unique(df$.ci)[1], length(conc_u) )
   
   outDf <- data.frame(
-    .ri=df$.ri[df$`Sample type` == 'QC'],
-    .ci=df$.ci[df$`Sample type` == 'QC'],
-    responseU=qcYp,
-    responseW=qcYwp,
-    diff=(1-(qcYwp/qcYp))*100,
+    .ri=rowIdx,
+    .ci=colIdx,
+    concentrationU=conc_u,
+    concentrationW=conc_w,
+    responseU=resp_u,
+    responseW=resp_w,
+    x_predicted=x_prediction,
+    y_predicted=y_prediction,
+    diff=(1-(conc_w/conc_u))*100,
     npar=npar
   ) 
   
