@@ -37,34 +37,22 @@ library(nplr)
                     weights = w, 
                     is_log=TRUE)
   
-  coeff <- unlist( mdl$coefficients, use.names = FALSE)
+  #coeff <- unlist( mdl$coefficients, use.names = FALSE)
+  #browser()
   
-  if(npar==5){
-    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
-  }else if(npar == 4){
-    qcYp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
-  }
+
+  qcXp  <- unlist(lapply(qcY, function(yhat) approx(x = mdl$fitted.values, y = stdX, xout = yhat/maxY)$y ))
+  qcXwp <- unlist(lapply(qcY, function(yhat) approx(x = mdl$fitted.values, y = stdX, xout = yhat/maxY)$y ))
+
   
-  
-  coeff <- unlist( mdlWeight$coefficients, use.names = FALSE)
-  if(npar==5){
-    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                 (1 + coeff['nu'] * exp(-coeff['eta'] * (qcX - coeff['phi'])))^(1 / coeff['nu'])  ) ) * maxY
-  }else if(npar == 4){
-    qcYwp <- ((coeff['alpha'] + (coeff['beta'] -coeff['alpha']  ) / 
-                 (1  * exp(-coeff['eta'] * (qcX - coeff['phi']))) ) ) * maxY
-  }
-  
-  rowIdx <- rep( unique(df$.ri)[1], length(qcYp) )
-  colIdx <- rep( unique(df$.ci)[1], length(qcYp) )
+  rowIdx <- rep( unique(df$.ri)[1], length(qcXp) )
+  colIdx <- rep( unique(df$.ci)[1], length(qcXp) )
   
   outDf <- data.frame(
     .ri=rowIdx,
     .ci=colIdx,
-    responseU=qcYp,
-    responseW=qcYwp,
+    concentrationU=qcXp,
+    concetrationW=qcXwp,
     diff=(1-(qcYwp/qcYp))*100,
     npar=npar
   ) 
@@ -93,6 +81,8 @@ library(nplr)
   
   mdlU <- nplr(stdX, stdY, npars=npar, useLog=FALSE, silent = TRUE)
   
+  
+  browser()
   coeff <- getPar(mdlU  )$params
   
   if(npar == 5){
