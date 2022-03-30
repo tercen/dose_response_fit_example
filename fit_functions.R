@@ -3,7 +3,7 @@ library(nplr)
 
 
 
-.drda_fit <- function(df, npar=5){
+.drda_fit <- function(df, npar=5, summary_index=1){
   x <- df$log
   y <- df$.y
   
@@ -37,7 +37,7 @@ library(nplr)
                     weights = w, 
                     is_log=TRUE)
   
-  #coeff <- unlist( mdl$coefficients, use.names = FALSE)
+  
   
   
 
@@ -90,13 +90,29 @@ library(nplr)
     npar=npar
   ) 
   
-  return(outDf)
+  coeffs <- unlist( mdl$coefficients, use.names = TRUE)
+  coeffsW <- unlist( mdlWeight$coefficients, use.names = TRUE)
+  
+  sumDf <- data.frame(
+    summary_index= summary_index,
+    aucU = nauc( mdl ),
+    aucW = nauc( mdlWeight ),
+    gofU = 1-(sigma(mdl)/sd(stdY)),
+    gofW = 1-(sigma(mdlWeight)/sd(stdY)),
+    fitpar=npar,
+    paramsU=paste(names(coeffs),coeffs,sep="=",collapse=", " ),
+    paramsW=paste(names(coeffsW),coeffsW,sep="=",collapse=", " )
+  )
+  
+  
+  
+  return( list(outDf, sumDf) )
 }
 
 
 
 
-.nplr_fit <- function(df, npar=5){
+.nplr_fit <- function(df, npar=5, summary_index=0){
   x <- df$log
   y <- df$.y
   
@@ -145,9 +161,6 @@ library(nplr)
   
   
   
-  
-  
-  
   conc_u <- y_prediction * NA
   conc_w <- y_prediction * NA
   resp_u <- y_prediction * NA
@@ -169,7 +182,7 @@ library(nplr)
   
   rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )
   colIdx <- rep( unique(df$.ci)[1], length(conc_u) )
-  
+
   outDf <- data.frame(
     .ri=rowIdx,
     .ci=colIdx,
@@ -183,23 +196,45 @@ library(nplr)
     npar=npar
   ) 
   
-  return(outDf)
+  
+  
+  sumDf <- data.frame(
+    summary_index= summary_index,
+    aucU = getAUC( mdlU ),
+    aucW = getAUC( mdlW ),
+    gofU = getGoodness(mdlU),
+    gofW = getGoodness(mdlW),
+    fitpar=npar,
+    paramsU=paste(names(getPar(mdlU)),getPar(mdlU),sep="=",collapse=", " ),
+    paramsW=paste(names(getPar(mdlW)),getPar(mdlW),sep="=",collapse=", " )
+  )
+  
+  
+  
+  return( list(outDf, sumDf) )
 }
 
 do.curvefit <- function(df, lib){
   
   if( lib == 'drda'){
-    outDf <- .drda_fit(df, npar=4)
-    outDf <- rbind( outDf, .drda_fit(df, npar=5) )
+    outDf <- .drda_fit(df, npar=4, summary_index=1)
+    outDf2 <- .drda_fit(df, npar=5, summary_index=2)
+
+    data <- rbind( outDf[[1]], outDf2[[1]] )
+    summary <- rbind( outDf[[2]], outDf2[[2]] )
+    
+    outDf <- cbind(data,summary)
+    
   }else if( lib == 'nplr' ){
-    outDf <- .nplr_fit(df, npar=4)
-    outDf <- rbind( outDf, .nplr_fit(df, npar=5) )
+    outDf <- .nplr_fit(df, npar=4, summary_index=1)
+    outDf2 <- .nplr_fit(df, npar=5, summary_index=2)
+
+    data <- rbind( outDf[[1]], outDf2[[1]] )
+    summary <- rbind( outDf[[2]], outDf2[[2]] )
+    
+    outDf <- cbind(data,summary)
   }
-  
-  outDf <- outDf %>%
-    #mutate(across(npar, as.integer)) %>%
-    as_tibble()
-  
+
   return(outDf)
 }
 
