@@ -1,0 +1,23 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "CurveFit_r2",
+  "namespace": "ds3",
+  "inputDataUri": "CurveFit_r2_in.csv",
+  "outputDataUri": ["CurveFit_r2_out_1.csv", "CurveFit_r2_out_2.csv", "CurveFit_r2_out_3.csv", "CurveFit_r2_out_4.csv", "CurveFit_r2_out_5.csv"],
+  "columns": [
+    "ds0.log"
+  ],
+  "rows": ["Assay ID"],
+  "colors": [
+    "Sample type"
+  ],
+  "labels": [
+    "Sample ID"
+  ],
+  "yAxis": "y_values",
+  "xAxis": "",
+  "generatedOn": "07/11/2022 06:07:41 PM 2022",
+  "version": "1.2.0",
+  "r2": 0.9,
+  "equalityMethod": "R2"
+}
