@@ -1,0 +1,55 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": ".ri",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": ".ci",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.concentrationU",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.concentrationW",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.responseU",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.responseW",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.x_predicted",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.y_predicted",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.diff",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.npar",
+      "type": "double"
+    }
+  ]
+}

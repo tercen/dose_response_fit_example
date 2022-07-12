@@ -190,13 +190,6 @@
       "Repository": "CRAN",
       "Hash": "a68b980681bcbc84c7a67003fa796bfb"
     },
-    "stringr": {
-      "Package": "stringr",
-      "Version": "1.4.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "0759e6b6c0957edb1311028a49a35e76"
-    },
     "sys": {
       "Package": "sys",
       "Version": "3.4",
@@ -264,10 +257,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "tim",
-      "RemoteUsername": "tercen",
-      "RemoteRef": "0.0.14",
-      "RemoteSha": "4b8a7b807f34c9d05ff86c60847c150886a6710f",
-      "Hash": "f5e953c164f5eb574c091c18937686ad"
+      "RemoteUsername": "tsmonteiro",
+      "RemoteRef": "0.0.26",
+      "RemoteSha": "9f83ac19b10a59bf54f63ef2db16cda1fe2aad7c",
+      "Hash": "ad67b2793d880cf3998603b645dfd0a8"
     },
     "utf8": {
       "Package": "utf8",

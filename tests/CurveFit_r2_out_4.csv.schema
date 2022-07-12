@@ -1,0 +1,65 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": ".ri",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.aucU.trapezoid",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.aucU.Simpson",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.aucW.trapezoid",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.aucW.Simpson",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.gofU.gof",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.gofU.wgof",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.gofW.gof",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.gofW.wgof",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.fitpar",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.paramsU",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds3.paramsW",
+      "type": "string"
+    }
+  ]
+}

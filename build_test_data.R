@@ -72,7 +72,7 @@ for( i in seq(1, length(stepIdList))){
     
     tim::build_test_data( result, ctx, paste0(step_name, "_r2"),
                           version = '1.2.0',
-                          r2 = 0.9,
+                          r2 = 0.9, gen_schema=TRUE,
                           skipCols=c())
   }
   
