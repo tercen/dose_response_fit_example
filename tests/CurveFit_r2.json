@@ -1,7 +1,7 @@
 {
   "kind": "OperatorUnitTest",
   "name": "CurveFit_r2",
-  "namespace": "ds5",
+  "namespace": "ds7",
   "inputDataUri": "CurveFit_r2_in.csv",
   "outputDataUri": ["CurveFit_r2_out_1.csv", "CurveFit_r2_out_2.csv", "CurveFit_r2_out_3.csv", "CurveFit_r2_out_4.csv", "CurveFit_r2_out_5.csv"],
   "columns": [
@@ -16,7 +16,7 @@
   ],
   "yAxis": "y_values",
   "xAxis": "",
-  "generatedOn": "07/13/2022 05:13:24 PM 2022",
+  "generatedOn": "07/13/2022 05:43:39 PM 2022",
   "version": "1.2.0",
   "r2": 0.9,
   "equalityMethod": "R2"

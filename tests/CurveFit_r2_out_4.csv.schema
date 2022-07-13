@@ -8,57 +8,57 @@
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.aucU.trapezoid",
+      "name": "ds7.aucU.trapezoid",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.aucU.Simpson",
+      "name": "ds7.aucU.Simpson",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.aucW.trapezoid",
+      "name": "ds7.aucW.trapezoid",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.aucW.Simpson",
+      "name": "ds7.aucW.Simpson",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.gofU.gof",
+      "name": "ds7.gofU.gof",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.gofU.wgof",
+      "name": "ds7.gofU.wgof",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.gofW.gof",
+      "name": "ds7.gofW.gof",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.gofW.wgof",
+      "name": "ds7.gofW.wgof",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.fitpar",
+      "name": "ds7.fitpar",
       "type": "double"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.paramsU",
+      "name": "ds7.paramsU",
       "type": "string"
     },
     {
       "kind": "ColumnSchema",
-      "name": "ds5.paramsW",
+      "name": "ds7.paramsW",
       "type": "string"
     }
   ]

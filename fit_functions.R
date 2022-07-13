@@ -248,8 +248,6 @@ curvefit <- function( ctx, lib='nplr' ){
   colIdx <- rep( unique(df$.ci)[1], length(conc_u) )
 
   outDf <- data.frame(
-    .ri=rowIdx,
-    .ci=colIdx,
     concentrationU=conc_u,
     concentrationW=conc_w,
     responseU=resp_u,
@@ -257,7 +255,9 @@ curvefit <- function( ctx, lib='nplr' ){
     x_predicted=x_prediction,
     y_predicted=y_prediction,
     diff=(1-(conc_w/conc_u))*100,
-    npar=npar
+    npar=npar,
+    .ri=rowIdx,
+    .ci=colIdx
   ) 
   
   
