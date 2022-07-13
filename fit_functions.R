@@ -131,23 +131,14 @@ curvefit <- function( ctx, lib='nplr' ){
   y_prediction <- predict(mdl, x_prediction)*maxY
   
   
-  conc_u <- y_prediction * NA
-  conc_w <- y_prediction * NA
-  resp_u <- y_prediction * NA
-  resp_w <- y_prediction * NA
+  conc_u<-approx( qcY, qcXp, xout = y_prediction )
+  conc_w<-approx( qcY, qcXwp, xout = y_prediction )
   
+  resp_u <- conc_u$x
+  conc_u <- conc_u$y
   
-  for( i in seq(1, length(x_prediction))){
-    if( x_prediction[i] %in% qcXp ){
-      conc_u[i] <- x_prediction[i]
-      resp_u[i] <- y_prediction[i]
-    }
-    
-    if( x_prediction[i] %in% qcXwp ){
-      conc_w[i] <- x_prediction[i]
-      resp_w[i] <- y_prediction[i]
-    }
-  }
+  resp_w <- conc_w$x
+  conc_w <- conc_w$y
   
   
   rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )
@@ -221,37 +212,36 @@ curvefit <- function( ctx, lib='nplr' ){
   x_prediction<- x_prediction[x_prediction>=min(stdX) & x_prediction<=max(stdX) ]
   
   
-  coeff <- getPar(mdlU  )$params
+  coeff   <- getPar(mdlU  )$params
+  coeff_w <- getPar(mdlW  )$params
   
   if(npar == 5){
     y_prediction <- (coeff[['bottom']] + 
-               (coeff[['top']] - coeff[['bottom']])/
-               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) )^coeff[['s']])) * maxY  
+                       (coeff[['top']] - coeff[['bottom']])/
+                       ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) )^coeff[['s']])) * maxY  
+    y_prediction_w <- (coeff_w[['bottom']] + 
+                         (coeff_w[['top']] - coeff_w[['bottom']])/
+                         ((1 + 10^(coeff_w[['scal']]*(coeff_w[['xmid']]-x_prediction) ) )^coeff_w[['s']])) * maxY  
+    
   }else if(npar == 4){
     y_prediction <- (coeff[['bottom']] + 
-               (coeff[['top']] - coeff[['bottom']])/
-               ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) ))) * maxY
-  }
-  
-  
-  
-  conc_u <- y_prediction * NA
-  conc_w <- y_prediction * NA
-  resp_u <- y_prediction * NA
-  resp_w <- y_prediction * NA
-  
-  
-  for( i in seq(1, length(x_prediction))){
-    if( x_prediction[i] %in% qcXp ){
-      conc_u[i] <- x_prediction[i]
-      resp_u[i] <- y_prediction[i]
-    }
+                       (coeff[['top']] - coeff[['bottom']])/
+                       ((1 + 10^(coeff[['scal']]*(coeff[['xmid']]-x_prediction) ) ))) * maxY
     
-    if( x_prediction[i] %in% qcXwp ){
-      conc_w[i] <- x_prediction[i]
-      resp_w[i] <- y_prediction[i]
-    }
+    y_prediction_w <- (coeff_w[['bottom']] + 
+                         (coeff_w[['top']] - coeff_w[['bottom']])/
+                         ((1 + 10^(coeff_w[['scal']]*(coeff_w[['xmid']]-x_prediction) ) ))) * maxY
+    
   }
+  
+  conc_u<-approx( qcY, qcXp, xout = y_prediction )
+  conc_w<-approx( qcY, qcXwp, xout = y_prediction )
+  
+  resp_u <- conc_u$x
+  conc_u <- conc_u$y
+  
+  resp_w <- conc_w$x
+  conc_w <- conc_w$y
   
   
   rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )

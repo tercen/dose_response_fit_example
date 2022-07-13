@@ -178,10 +178,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.0.3",
+      "Version": "1.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9103a8f74b2114a5ed1136b471d8feca"
+      "Hash": "6539dd8c651e67e3b55b5ffea106362b"
     },
     "stringi": {
       "Package": "stringi",
@@ -189,6 +189,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a68b980681bcbc84c7a67003fa796bfb"
+    },
+    "stringr": {
+      "Package": "stringr",
+      "Version": "1.4.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "0759e6b6c0957edb1311028a49a35e76"
     },
     "sys": {
       "Package": "sys",
@@ -258,9 +265,9 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "tim",
       "RemoteUsername": "tsmonteiro",
-      "RemoteRef": "0.0.26",
-      "RemoteSha": "9f83ac19b10a59bf54f63ef2db16cda1fe2aad7c",
-      "Hash": "ad67b2793d880cf3998603b645dfd0a8"
+      "RemoteRef": "0.0.34",
+      "RemoteSha": "1e5003cac8c8f1cdb2c1fc529b82424de20f8d15",
+      "Hash": "d0a962d2afef95647143b2aa17c0667e"
     },
     "utf8": {
       "Package": "utf8",
