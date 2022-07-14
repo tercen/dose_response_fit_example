@@ -244,10 +244,6 @@ curvefit <- function( ctx, lib='nplr' ){
   conc_w <- conc_w$y
   
   
-  conc_u[which(!is.finite(conc_u))] <- -10
-  conc_w[which(!is.finite(conc_w))] <- -10
-  
-  
   rowIdx <- rep( unique(df$.ri)[1], length(conc_u) )
   colIdx <- rep( unique(df$.ci)[1], length(conc_u) )
 
