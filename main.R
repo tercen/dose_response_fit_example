@@ -5,6 +5,7 @@ library(drda)
 library(nplr)
 source( 'fit_functions.R' )
 
+set.seed(123)
 
 # =======================================================
 #
